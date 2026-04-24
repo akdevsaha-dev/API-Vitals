@@ -1,21 +1,16 @@
 import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import { db } from "@repo/database";
-
+import "dotenv/config";
+import { config } from "./configs/config";
+import authRouter from "./routes/auth.route";
 const app = express();
-const port = process.env.PORT || 3001;
 
-app.use(cors());
 app.use(express.json());
-app.use(cookieParser());
 
+const PORT = config.port;
 app.get("/health", (req, res) => {
-  db.query("SELECT 1");
-  res.json({ status: "ok", service: "api" });
+  res.send("Ok!");
 });
-
-app.listen(port, () => {
-  db.connect();
-  console.log(`API server running on port ${port}`);
+app.use("/api/v1/auth", authRouter);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`App is running on port: ${PORT}`);
 });
