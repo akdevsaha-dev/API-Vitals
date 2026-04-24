@@ -1,6 +1,7 @@
-export const db = {
-  connect: () => console.log("Connected to API Vitals Database"),
-  query: (sql: string) => console.log(`Executing: ${sql}`),
-};
+import { drizzle } from "drizzle-orm/neon-http";
 
-export type Database = typeof db;
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not defined");
+}
+
+export const db = drizzle(process.env.DATABASE_URL);
