@@ -8,4 +8,13 @@ export const signupSchema = z.object({
     .max(100),
 });
 
+export const signinSchema = z.object({
+  email: z.email().toLowerCase().trim(),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(100),
+});
+
 export type signupInput = z.infer<typeof signupSchema>;
+export type signinInput = z.infer<typeof signinSchema>;
