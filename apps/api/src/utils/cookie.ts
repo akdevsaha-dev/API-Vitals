@@ -19,4 +19,8 @@ export const cookies = {
   get: (req: Request, name: string) => {
     return req.cookies[name];
   },
+  clear: (res: Response, name: string, options: CookieOptions = {}) => {
+    const { maxAge: _, ...rest } = cookies.getOptions();
+    res.clearCookie(name, { ...rest, ...options });
+  },
 };
