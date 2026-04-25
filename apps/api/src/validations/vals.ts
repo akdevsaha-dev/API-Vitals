@@ -1,5 +1,5 @@
 import z from "zod";
-
+//auth
 export const signupSchema = z.object({
   email: z.email().toLowerCase().trim(),
   password: z
@@ -16,5 +16,15 @@ export const signinSchema = z.object({
     .max(100),
 });
 
+//project
+export const createProjectSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+});
+
+//auth
 export type signupInput = z.infer<typeof signupSchema>;
 export type signinInput = z.infer<typeof signinSchema>;
+
+//project
+export type createProjectInput = z.infer<typeof createProjectSchema>;

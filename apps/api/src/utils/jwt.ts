@@ -16,7 +16,7 @@ export const jwttoken = {
   },
   verify: (token: string) => {
     try {
-      return jwt.verify(token, JWT_SECRET);
+      return jwt.verify(token, JWT_SECRET) as payloadProps;
     } catch (error: unknown) {
       if (error instanceof jwt.TokenExpiredError) {
         throw new Error("Session error");

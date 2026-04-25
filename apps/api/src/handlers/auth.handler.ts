@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { signinSchema, signupSchema } from "../validations/vals";
 import { createUser, getUser } from "../services/auth.service";
 import { jwttoken } from "../utils/jwt";
@@ -20,14 +20,16 @@ export const signup = async (req: Request, res: Response) => {
     });
     cookies.set(res, "token", token);
     return res.status(201).json(user);
-  } catch (error: any) {
-    if (error.message === "User already exists") {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === "User already exists") {
       return res.status(409).json({
         error: error.message,
       });
     }
     console.error(error);
-    return res.status(500).json({ message: "Something went wrong" });
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
   }
 };
 
@@ -48,8 +50,11 @@ export const signin = async (req: Request, res: Response) => {
     });
     cookies.set(res, "token", token);
     return res.status(200).json(user);
-  } catch (error: any) {
-    if (error.message === "Invalid email or password") {
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      error.message === "Invalid email or password"
+    ) {
       return res.status(401).json({
         error: error.message,
       });

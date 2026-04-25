@@ -23,10 +23,16 @@ export const createUser = async ({ email, password }: signupInput) => {
       });
 
     return user;
-  } catch (err: any) {
-    if (err.code === "23505") {
+  } catch (err: unknown) {
+    if (
+      typeof err === "object" &&
+      err !== null &&
+      "code" in err &&
+      (err as { code?: string }).code === "23505"
+    ) {
       throw new Error("User already exists");
     }
+
     throw new Error("Failed to create user");
   }
 };

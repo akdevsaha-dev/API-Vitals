@@ -3,6 +3,8 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import { config } from "./configs/config";
 import authRouter from "./routes/auth.route";
+import projectRouter from "./routes/project.route";
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -11,6 +13,7 @@ app.get("/health", (req, res) => {
   res.send("Ok!");
 });
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/projects", projectRouter);
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`App is running on port: ${PORT}`);
 });
