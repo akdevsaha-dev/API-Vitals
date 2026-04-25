@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { signinSchema, signupSchema } from "../validations/vals";
 import { createUser, getUser } from "../services/auth.service";
+import { jwttoken } from "../utils/jwt";
+import { cookies } from "../utils/cookie";
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -12,7 +14,11 @@ export const signup = async (req: Request, res: Response) => {
     }
     const { email, password } = result.data;
     const user = await createUser({ email, password });
-
+    const token = jwttoken.sign({
+      id: user.id,
+      email: user.email,
+    });
+    cookies.set(res, "token", token);
     return res.status(201).json(user);
   } catch (error: any) {
     if (error.message === "User already exists") {
@@ -35,6 +41,12 @@ export const signin = async (req: Request, res: Response) => {
     }
     const { email, password } = result.data;
     const user = await getUser({ email, password });
+
+    const token = jwttoken.sign({
+      id: user.id,
+      email: user.email,
+    });
+    cookies.set(res, "token", token);
     return res.status(200).json(user);
   } catch (error: any) {
     if (error.message === "Invalid email or password") {
