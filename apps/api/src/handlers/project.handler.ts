@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { createProjectSchema } from "../validations/vals";
-import { Project } from "../services/project.service";
+import { fetchProjects, Project } from "../services/project.service";
 
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -28,5 +28,19 @@ export const createProject = async (req: Request, res: Response) => {
     return res.status(500).json({
       error: "Something went wrong",
     });
+  }
+};
+
+export const getProjects = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const projects = await fetchProjects(userId);
+    return res.status(200).json(projects);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error);
+      return res.status(500).json({ error: error.message });
+    }
+    return res.status(500).json({ error: "Something went wrong" });
   }
 };

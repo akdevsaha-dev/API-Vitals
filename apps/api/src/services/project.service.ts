@@ -45,3 +45,15 @@ export const Project = async ({
     throw new Error("Failed to create project");
   }
 };
+
+export const fetchProjects = async (userId: string) => {
+  try {
+    const userProjects = await db.query.projects.findMany({
+      where: eq(projects.userId, userId),
+    });
+
+    return userProjects;
+  } catch (err: unknown) {
+    throw new Error("Failed to fetch projects");
+  }
+};
