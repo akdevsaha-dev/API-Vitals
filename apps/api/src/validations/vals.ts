@@ -15,6 +15,8 @@ export const signinSchema = z.object({
     .min(6, "Password must be at least 6 characters")
     .max(100),
 });
+export type signupInput = z.infer<typeof signupSchema>;
+export type signinInput = z.infer<typeof signinSchema>;
 
 //project
 export const createProjectSchema = z.object({
@@ -22,9 +24,4 @@ export const createProjectSchema = z.object({
   description: z.string().optional(),
 });
 
-//auth
-export type signupInput = z.infer<typeof signupSchema>;
-export type signinInput = z.infer<typeof signinSchema>;
-
-//project
 export type createProjectInput = z.infer<typeof createProjectSchema>;

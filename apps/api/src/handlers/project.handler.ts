@@ -1,6 +1,10 @@
 import type { Request, Response } from "express";
 import { createProjectSchema } from "../validations/vals";
-import { fetchProjects, Project } from "../services/project.service";
+import {
+  fetchProject,
+  fetchProjects,
+  Project,
+} from "../services/project.service";
 
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -42,5 +46,19 @@ export const getProjects = async (req: Request, res: Response) => {
       return res.status(500).json({ error: error.message });
     }
     return res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+export const getProject = async (req: Request, res: Response) => {
+  try {
+    const { projectId } = req.params as { projectId: string };
+    const project = await fetchProject(projectId);
+    return res.status(200).json(project);
+  } catch (error: unknown) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Failed to fetch project",
+    });
   }
 };

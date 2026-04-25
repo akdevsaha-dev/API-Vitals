@@ -57,3 +57,13 @@ export const fetchProjects = async (userId: string) => {
     throw new Error("Failed to fetch projects");
   }
 };
+
+export const fetchProject = async (projectId: string) => {
+  const project = await db.query.projects.findFirst({
+    where: eq(projects.id, projectId),
+    with: {
+      targets: true,
+    },
+  });
+  return project;
+};
