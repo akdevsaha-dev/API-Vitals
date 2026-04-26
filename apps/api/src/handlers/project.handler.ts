@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
-import { createProjectSchema } from "../validations/vals";
+import { createProjectSchema, createTargetSchema } from "../validations/vals";
 import {
+  createTarget,
+  deletedProject,
   fetchProject,
   fetchProjects,
   Project,
@@ -59,6 +61,49 @@ export const getProject = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       error: "Failed to fetch project",
+    });
+  }
+};
+
+export const deleteProject = async (req: Request, res: Response) => {
+  try {
+    const { projectId } = req.params as { projectId: string };
+    const userId = req.user.id;
+    const project = await deletedProject({ projectId, userId });
+
+    return res.status(200).json({
+      message: "Project deleted successfully",
+      project,
+    });
+  } catch (error: unknown) {
+    console.error(error);
+
+    if (error instanceof Error) {
+      return res.status(404).json({ error: error.message });
+    }
+
+    return res.status(500).json({
+      error: "Something went wrong",
+    });
+  }
+};
+
+export const Target = async (req: Request, res: Response) => {
+  try {
+    const result = createTargetSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        error: result.error.message,
+      });
+    }
+    const { url, label } = result.data;
+    const { projectId } = req.params as { projectId: string };
+
+    const target = await createTarget({ url, label, projectId });
+    return res.status(201).json(target);
+  } catch (error: unknown) {
+    return res.status(500).json({
+      error: "Internal Server Error",
     });
   }
 };

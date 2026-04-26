@@ -1,10 +1,20 @@
-import { db, projects } from "@repo/database/index";
-import { createProjectInput } from "../validations/vals";
+import { db, projects, targets } from "@repo/database/index";
+import { createProjectInput, createTargetInput } from "../validations/vals";
 import { and, eq } from "drizzle-orm";
 
 type CreateProjectArgs = createProjectInput & {
   userId: string;
 };
+
+type DeleteProjectArgs = {
+  projectId: string;
+  userId: string;
+};
+
+type Targetargs = createTargetInput & {
+  projectId: string;
+};
+
 export const Project = async ({
   name,
   description,
@@ -66,4 +76,40 @@ export const fetchProject = async (projectId: string) => {
     },
   });
   return project;
+};
+
+export const deletedProject = async ({
+  projectId,
+  userId,
+}: DeleteProjectArgs) => {
+  const result = await db
+    .delete(projects)
+    .where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
+    .returning({ id: projects.id });
+
+  if (result.length === 0) {
+    throw new Error("Project not found or unauthorized");
+  }
+  return result[0];
+};
+
+export const createTarget = async ({ url, label, projectId }: Targetargs) => {
+  const [createdTarget] = await db
+    .insert(targets)
+    .values({
+      url,
+      label,
+      projectId,
+    })
+    .returning({
+      id: targets.id,
+      url: targets.url,
+      label: targets.label,
+      projectId: targets.projectId,
+      createdAt: targets.createdAt,
+    });
+  if (!createdTarget) {
+    throw new Error("TARGET_CREATION_FAILED");
+  }
+  return createdTarget;
 };

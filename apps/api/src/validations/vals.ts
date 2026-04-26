@@ -25,3 +25,11 @@ export const createProjectSchema = z.object({
 });
 
 export type createProjectInput = z.infer<typeof createProjectSchema>;
+
+//target
+export const createTargetSchema = z.object({
+  url: z.string(),
+  label: z.string().optional(),
+});
+
+export type createTargetInput = z.infer<typeof createTargetSchema>;
