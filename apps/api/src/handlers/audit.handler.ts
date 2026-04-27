@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { triggerAuditSchema } from "../validations/vals";
-import { createTriggerAudit } from "../services/audit.service";
+import { createTriggerAudit, JobStatus } from "../services/audit.service";
 
 export const triggerAudit = async (req: Request, res: Response) => {
   try {
@@ -28,6 +28,24 @@ export const triggerAudit = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       error: "Internal Server Error",
+    });
+  }
+};
+
+export const getJobStatus = async (req: Request, res: Response) => {
+  const { jobId } = req.params as { jobId: string };
+  try {
+    const job = await JobStatus({ jobId });
+    return res.status(200).json(job);
+  } catch (err) {
+    if (err instanceof Error && err.message === "Job_Not_Found") {
+      return res.status(404).json({
+        error: "Job not found",
+      });
+    }
+    console.error("Database Error:", err);
+    return res.status(500).json({
+      error: "Something went wrong",
     });
   }
 };

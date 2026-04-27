@@ -51,3 +51,16 @@ export const createTriggerAudit = async ({
     throw new Error("QUEUE_PUSH_FAILED");
   }
 };
+
+export const JobStatus = async ({ jobId }: { jobId: string }) => {
+  const [job] = await db
+    .select()
+    .from(auditJobs)
+    .where(eq(auditJobs.id, jobId))
+    .limit(1);
+
+  if (!job) {
+    throw new Error("Job_Not_Found");
+  }
+  return job;
+};
