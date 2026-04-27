@@ -1,6 +1,12 @@
-import { auditJobs, db, projects, targets } from "@repo/database/index";
+import {
+  auditJobs,
+  auditResults,
+  db,
+  projects,
+  targets,
+} from "@repo/database/index";
 import { triggerInput } from "../validations/vals";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { auditQueue } from "@repo/queue";
 
@@ -63,4 +69,26 @@ export const JobStatus = async ({ jobId }: { jobId: string }) => {
     throw new Error("Job_Not_Found");
   }
   return job;
+};
+
+export const AuditResult = async ({
+  targetId,
+  limit,
+  userId,
+}: {
+  targetId: string;
+  limit: number;
+  userId: string;
+}) => {
+  const result = await db
+    .select()
+    .from(auditResults)
+    .innerJoin(targets, eq(auditResults.targetId, targets.id))
+    .innerJoin(projects, eq(targets.projectId, projects.id))
+    .where(
+      and(eq(auditResults.targetId, targetId), eq(projects.userId, userId)),
+    )
+    .orderBy(desc(auditResults.createdAt))
+    .limit(limit);
+  return result;
 };

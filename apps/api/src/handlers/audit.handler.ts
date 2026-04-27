@@ -1,6 +1,10 @@
 import type { Request, Response } from "express";
 import { triggerAuditSchema } from "../validations/vals";
-import { createTriggerAudit, JobStatus } from "../services/audit.service";
+import {
+  AuditResult,
+  createTriggerAudit,
+  JobStatus,
+} from "../services/audit.service";
 
 export const triggerAudit = async (req: Request, res: Response) => {
   try {
@@ -47,5 +51,25 @@ export const getJobStatus = async (req: Request, res: Response) => {
     return res.status(500).json({
       error: "Something went wrong",
     });
+  }
+};
+
+export const getAuditResult = async (req: Request, res: Response) => {
+  try {
+    const { targetId, limit = "10" } = req.query;
+    const userId = req.user.id;
+
+    if (!targetId || typeof targetId !== "string") {
+      return res.status(400).json({ error: "targetId required" });
+    }
+    const parsedLimit = Math.min(parseInt(limit as string, 10) || 10, 50);
+    const finalAudit = await AuditResult({
+      targetId,
+      limit: parsedLimit,
+      userId,
+    });
+    return res.json(finalAudit);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
