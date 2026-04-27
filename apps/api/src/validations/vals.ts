@@ -33,3 +33,10 @@ export const createTargetSchema = z.object({
 });
 
 export type createTargetInput = z.infer<typeof createTargetSchema>;
+
+//audit
+
+export const triggerAuditSchema = z.object({
+  targetId: z.string(),
+});
+export type triggerInput = z.infer<typeof triggerAuditSchema>;

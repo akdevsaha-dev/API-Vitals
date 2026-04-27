@@ -1,5 +1,5 @@
-import { db, projects, targets } from "@repo/database/index";
-import { and, eq } from "drizzle-orm";
+import { db, targets } from "@repo/database/index";
+import { eq } from "drizzle-orm";
 
 export const DeletedTarget = async (targetId: string, userId: string) => {
   const target = await db.query.targets.findFirst({

@@ -11,7 +11,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/database": "workspace:*"
+    "@repo/database": "workspace:*",
+    "@repo/queue": "workspace:*"
   },
   "devDependencies": {
     "@repo/config": "workspace:*",
