@@ -6,7 +6,7 @@ type ProbeMetrics struct {
 	DNS        time.Duration
 	TCP        time.Duration
 	TLS        time.Duration
-	TTFP       time.Duration
+	TTFB       time.Duration
 	Total      time.Duration
 	StatusCode int
 }
