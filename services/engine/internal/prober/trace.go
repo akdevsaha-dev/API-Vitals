@@ -53,13 +53,12 @@ func TraceURL(url string) (*ProbeMetrics, error) {
 	total := time.Since(start)
 
 	return &ProbeMetrics{
-		DNS:   dnsDone.Sub(dnsStart),
-		TCP:   connDone.Sub(connStart),
-		TLS:   tlsDone.Sub(tlsStart),
-		TTFB:  firstByte.Sub(connDone),
-		Total: total,
+		DNS:        dnsDone.Sub(dnsStart),
+		TCP:        connDone.Sub(connStart),
+		TLS:        tlsDone.Sub(tlsStart),
+		TTFB:       firstByte.Sub(connDone),
+		Total:      total,
+		StatusCode: resp.StatusCode,
 	}, nil
 
 }
-
-
