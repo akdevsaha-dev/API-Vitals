@@ -18,7 +18,7 @@ func main() {
 
 	result, err := prober.ExecuteAudit(url)
 	if err != nil {
-		json.NewEncoder(os.Stdout).Encode(map[string]string{
+		json.NewEncoder(os.Stderr).Encode(map[string]string{
 			"error": err.Error(),
 		})
 		os.Exit(1)
