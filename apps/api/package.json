@@ -11,6 +11,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/lib": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/queue": "workspace:*",
     "bcryptjs": "^3.0.3",

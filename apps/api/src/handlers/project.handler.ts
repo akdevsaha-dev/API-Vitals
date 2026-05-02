@@ -7,6 +7,8 @@ import {
   fetchProjects,
   Project,
 } from "../services/project.service";
+import { and, eq } from "drizzle-orm";
+import { db, projects } from "@repo/database/index";
 
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -54,7 +56,8 @@ export const getProjects = async (req: Request, res: Response) => {
 export const getProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = req.params as { projectId: string };
-    const project = await fetchProject(projectId);
+    const userId = req.user.id;
+    const project = await fetchProject(projectId, userId);
     return res.status(200).json(project);
   } catch (error: unknown) {
     console.error(error);
@@ -98,7 +101,21 @@ export const Target = async (req: Request, res: Response) => {
     }
     const { url, label } = result.data;
     const { projectId } = req.params as { projectId: string };
+    const userId = req.user.id;
 
+    const project = await db.query.projects.findFirst({
+      where: and(
+        eq(projects.id, projectId),
+
+        eq(projects.userId, userId),
+      ),
+    });
+
+    if (!project) {
+      return res.status(403).json({
+        error: "Unauthorized access to project",
+      });
+    }
     const target = await createTarget({ url, label, projectId });
     return res.status(201).json(target);
   } catch (error: unknown) {

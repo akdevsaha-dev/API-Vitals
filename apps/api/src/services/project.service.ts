@@ -68,9 +68,9 @@ export const fetchProjects = async (userId: string) => {
   }
 };
 
-export const fetchProject = async (projectId: string) => {
+export const fetchProject = async (projectId: string, userId: string) => {
   const project = await db.query.projects.findFirst({
-    where: eq(projects.id, projectId),
+    where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
     with: {
       targets: true,
     },
