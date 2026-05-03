@@ -4,6 +4,7 @@ import { Marquee } from "@/components/landing/marquee";
 import { Navbar } from "@/components/landing/navbar";
 import { Observability } from "@/components/landing/observability";
 import { Flow } from "@/components/landing/flow";
+import { Pricing } from "@/components/landing/pricing";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Observability />
       <Capabilities />
       <Flow />
+      <Pricing />
     </div>
   );
 }
