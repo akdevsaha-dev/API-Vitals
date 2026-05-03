@@ -127,4 +127,12 @@
   #marquee {
     @apply container w-full h-32 mx-auto px-5 2xl:px-0 flex items-center gap-10;
   }
+
+  #obs {
+    @apply container w-full mx-auto px-5 2xl:px-0 flex-between h-screen;
+  }
+
+  #cap {
+    @apply container w-full mx-auto px-5 2xl:px-0 flex-between min-h-screen pb-20;
+  }
 }
