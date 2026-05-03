@@ -3,6 +3,7 @@ import { Hero } from "@/components/landing/hero";
 import { Marquee } from "@/components/landing/marquee";
 import { Navbar } from "@/components/landing/navbar";
 import { Observability } from "@/components/landing/observability";
+import { Flow } from "@/components/landing/flow";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Marquee />
       <Observability />
       <Capabilities />
+      <Flow />
     </div>
   );
 }
