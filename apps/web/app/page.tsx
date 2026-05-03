@@ -6,6 +6,7 @@ import { Observability } from "@/components/landing/observability";
 import { Flow } from "@/components/landing/flow";
 import { Pricing } from "@/components/landing/pricing";
 import { Voices } from "@/components/landing/voices";
+import { Footer } from "@/components/landing/footer";
 
 export default function Home() {
   return (
@@ -18,7 +19,9 @@ export default function Home() {
       <Flow />
       <Pricing />
       <Voices />
+      <Footer />
     </div>
   );
 }
+
 

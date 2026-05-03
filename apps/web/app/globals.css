@@ -121,7 +121,7 @@
   }
 
   .hero {
-    @apply container mx-auto px-5 2xl:px-0 flex-between;
+    @apply container mx-auto px-5 2xl:px-0 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12 lg:gap-0 min-h-screen;
   }
 
   #marquee {
@@ -129,10 +129,10 @@
   }
 
   #obs {
-    @apply container w-full mx-auto px-5 2xl:px-0 flex-between h-screen;
+    @apply container w-full mx-auto px-5 2xl:px-0 flex flex-col lg:flex-row lg:items-center lg:justify-between min-h-screen gap-16 lg:gap-10 py-20 lg:py-0;
   }
 
   #cap {
-    @apply container w-full mx-auto px-5 2xl:px-0 flex-between min-h-screen pb-20;
+    @apply container w-full mx-auto px-5 2xl:px-0 flex flex-col items-start min-h-screen pb-20;
   }
 }

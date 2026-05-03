@@ -1,5 +1,11 @@
-import React from "react";
-import Image from "next/image";
+"use client";
+
+import React, { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
     {
@@ -12,7 +18,7 @@ const testimonials = [
     {
         quote:
             "P99 was lying to us for months. lumen surfaced a TLS renegotiation issue on a single edge node — caught it on the first burst.",
-        name: "Marcus Kalu",
+        name: "Patricia Wisewood",
         role: "PLATFORM ENGINEER, TIDEFLOW",
         avatar: "https://i.pravatar.cc/150?u=marcus",
     },
@@ -26,17 +32,37 @@ const testimonials = [
 ];
 
 export const Voices = () => {
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useGSAP(() => {
+        const mm = gsap.matchMedia();
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+            gsap.from("[data-voice-animate]", {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                stagger: 0.15,
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 80%",
+                    once: true,
+                },
+            });
+        });
+    }, { scope: sectionRef });
+
     return (
-        <section id="voices" className="container w-full mx-auto px-5 2xl:px-0 py-32 flex flex-col">
+        <section ref={sectionRef} id="voices" className="container w-full mx-auto px-5 2xl:px-0 py-32 flex flex-col">
             <div className="flex flex-col max-w-3xl">
-                <div className="flex items-center tracking-widest font-mono text-sm uppercase text-neutral-500 gap-2">
+                <div data-voice-animate className="flex items-center tracking-widest font-mono text-sm uppercase text-neutral-500 gap-2">
                     <div className="w-1 h-1 rounded-full bg-neutral-400"></div>
                     <div>06</div>
                     <div>—</div>
                     <div>VOICES</div>
                 </div>
 
-                <div className="mt-8 font-display -tracking-widest text-6xl md:text-7xl font-extrabold leading-none">
+                <div data-voice-animate className="mt-8 font-display -tracking-widest text-6xl md:text-7xl font-extrabold leading-none">
                     The teams who
                     <span className="font-sans tracking-tighter italic text-neutral-400 font-light block mt-2">
                         trusted the burst.
@@ -47,6 +73,7 @@ export const Voices = () => {
             <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                 {testimonials.map((testimonial, index) => (
                     <div
+                        data-voice-animate
                         key={index}
                         className="flex flex-col justify-between p-10 bg-white border border-neutral-200"
                     >

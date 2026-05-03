@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Check, ArrowRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const tiers = [
     {
@@ -57,29 +62,48 @@ const tiers = [
 
 export const Pricing = () => {
     const [isYearly, setIsYearly] = useState(true);
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useGSAP(() => {
+        const mm = gsap.matchMedia();
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+            gsap.from("[data-price-animate]", {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                stagger: 0.12,
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 80%",
+                    once: true,
+                },
+            });
+        });
+    }, { scope: sectionRef });
 
     return (
-        <section id="pricing" className="container w-full mx-auto border-t bg-neutral-50 border-neutral-200 px-5 2xl:px-0 pt-20 pb-32 flex flex-col items-center">
+        <section ref={sectionRef} id="pricing" className="container w-full mx-auto border-t bg-neutral-50 border-neutral-200 px-5 2xl:px-0 pt-20 pb-32 flex flex-col items-center">
             <div className="flex flex-col items-center text-center max-w-3xl">
-                <div className="flex items-center tracking-widest font-mono text-sm uppercase text-neutral-500 gap-2">
+                <div data-price-animate className="flex items-center tracking-widest font-mono text-sm uppercase text-neutral-500 gap-2">
                     <div className="w-1 h-1 rounded-full bg-neutral-400"></div>
                     <div>05</div>
                     <div>—</div>
                     <div>PRICING</div>
                 </div>
 
-                <div className="mt-8 font-display -tracking-widest text-6xl md:text-7xl font-extrabold leading-tight">
+                <div data-price-animate className="mt-8 font-display -tracking-widest text-6xl md:text-7xl font-extrabold leading-tight">
                     Pay for telemetry,
                     <span className="font-sans tracking-tighter italic text-neutral-400 font-light block">
                         not for seats.
                     </span>
                 </div>
 
-                <p className="mt-8 tracking-wider text-neutral-600 font-light text-lg">
+                <p data-price-animate className="mt-8 tracking-wider text-neutral-600 font-light text-lg">
                     Honest, simple tiers. Cancel anytime. Open source CLI forever.
                 </p>
 
-                <div className="mt-10 flex items-center font-mono text-xs uppercase tracking-widest bg-white border border-neutral-200 p-1 shadow-sm">
+                <div data-price-animate className="mt-10 flex items-center font-mono text-xs uppercase tracking-widest bg-white border border-neutral-200 p-1 shadow-sm">
                     <button
                         onClick={() => setIsYearly(false)}
                         className={`px-6 py-3  transition-colors ${!isYearly ? "bg-black text-white" : "text-neutral-500 hover:text-black"
@@ -104,6 +128,7 @@ export const Pricing = () => {
 
                     return (
                         <div
+                            data-price-animate
                             key={tier.name}
                             className={`relative flex flex-col p-10 ${isHighlighted
                                 ? "bg-black text-white shadow-2xl z-10 -my-4 py-14"
