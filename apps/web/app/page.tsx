@@ -5,6 +5,7 @@ import { Navbar } from "@/components/landing/navbar";
 import { Observability } from "@/components/landing/observability";
 import { Flow } from "@/components/landing/flow";
 import { Pricing } from "@/components/landing/pricing";
+import { Voices } from "@/components/landing/voices";
 
 export default function Home() {
   return (
@@ -16,6 +17,8 @@ export default function Home() {
       <Capabilities />
       <Flow />
       <Pricing />
+      <Voices />
     </div>
   );
 }
+
