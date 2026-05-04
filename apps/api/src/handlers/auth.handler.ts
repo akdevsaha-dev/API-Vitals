@@ -3,92 +3,62 @@ import { signinSchema, signupSchema } from "../validations/vals";
 import { createUser, getUser, getUserById } from "../services/auth.service";
 import { jwttoken } from "../utils/jwt";
 import { cookies } from "../utils/cookie";
+import { asyncHandler } from "../utils/asyncHandler";
+import { sendSuccess, ApiError } from "../utils/response";
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = asyncHandler(async (req: Request, res: Response) => {
+  const result = signupSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(result.error.message, 400);
+  }
+  
+  const { email, password } = result.data;
+  
   try {
-    const result = signupSchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({
-        error: result.error.message,
-      });
-    }
-    const { email, password } = result.data;
     const user = await createUser({ email, password });
     const token = jwttoken.sign({
       id: user.id,
       email: user.email,
     });
     cookies.set(res, "token", token);
-    return res.status(201).json(user);
+    return sendSuccess(res, user, "User signed up successfully", 201);
   } catch (error: unknown) {
     if (error instanceof Error && error.message === "User already exists") {
-      return res.status(409).json({
-        error: error.message,
-      });
+      throw new ApiError(error.message, 409);
     }
-    console.error(error);
-    return res.status(500).json({
-      message: "Something went wrong",
-    });
+    throw error;
   }
-};
+});
 
-export const signin = async (req: Request, res: Response) => {
+export const signin = asyncHandler(async (req: Request, res: Response) => {
+  const result = signinSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(result.error.message, 400);
+  }
+  const { email, password } = result.data;
+  
   try {
-    const result = signinSchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({
-        error: result.error.message,
-      });
-    }
-    const { email, password } = result.data;
     const user = await getUser({ email, password });
-
     const token = jwttoken.sign({
       id: user.id,
       email: user.email,
     });
     cookies.set(res, "token", token);
-    return res.status(200).json(user);
+    return sendSuccess(res, user, "User signed in successfully", 200);
   } catch (error: unknown) {
-    if (
-      error instanceof Error &&
-      error.message === "Invalid email or password"
-    ) {
-      return res.status(401).json({
-        error: error.message,
-      });
+    if (error instanceof Error && error.message === "Invalid email or password") {
+      throw new ApiError(error.message, 401);
     }
-    console.error(error);
-    return res.status(500).json({
-      error: "Something went wrong",
-    });
+    throw error;
   }
-};
+});
 
-export const signout = (req: Request, res: Response) => {
-  try {
-    cookies.clear(res, "token");
-    res.status(200).json({ message: "User signed out" });
-  } catch (err: unknown) {
-    let message = "Something went wrong";
-    let status = 500;
-    if (err instanceof Error) {
-      message = err.message;
-    }
-    return res.status(status).json({ error: message });
-  }
-};
+export const signout = asyncHandler(async (req: Request, res: Response) => {
+  cookies.clear(res, "token");
+  return sendSuccess(res, null, "User signed out", 200);
+});
 
-export const checkAuth = (req: Request, res: Response) => {
-  try {
-    const user = getUserById(req.user.id);
-    return res.status(200).json(user);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
-  }
-};
+export const checkAuth = asyncHandler(async (req: Request, res: Response) => {
+  const user = await getUserById(req.user.id);
+  return sendSuccess(res, user, "Authenticated", 200);
+});

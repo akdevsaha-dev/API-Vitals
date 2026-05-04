@@ -9,118 +9,79 @@ import {
 } from "../services/project.service";
 import { and, eq } from "drizzle-orm";
 import { db, projects } from "@repo/database/index";
+import { asyncHandler } from "../utils/asyncHandler";
+import { sendSuccess, ApiError } from "../utils/response";
 
-export const createProject = async (req: Request, res: Response) => {
+export const createProject = asyncHandler(async (req: Request, res: Response) => {
+  const result = createProjectSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(result.error.message, 400);
+  }
+
+  const { name, description } = result.data;
+  const userId = req.user.id;
+
   try {
-    const result = createProjectSchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({
-        error: result.error.message,
-      });
-    }
-
-    const { name, description } = result.data;
-    const userId = req.user.id;
-
     const project = await Project({ name, description, userId });
-
-    return res.status(201).json(project);
+    return sendSuccess(res, project, "Project created successfully", 201);
   } catch (error: unknown) {
     if (error instanceof Error && error.message === "Project already exists") {
-      return res.status(409).json({
-        error: error.message,
-      });
+      throw new ApiError(error.message, 409);
     }
-    console.error(error);
-
-    return res.status(500).json({
-      error: "Something went wrong",
-    });
+    throw error;
   }
-};
+});
 
-export const getProjects = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user.id;
-    const projects = await fetchProjects(userId);
-    return res.status(200).json(projects);
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(error);
-      return res.status(500).json({ error: error.message });
-    }
-    return res.status(500).json({ error: "Something went wrong" });
-  }
-};
+export const getProjects = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user.id;
+  const projects = await fetchProjects(userId);
+  return sendSuccess(res, projects, "Projects retrieved successfully", 200);
+});
 
-export const getProject = async (req: Request, res: Response) => {
+export const getProject = asyncHandler(async (req: Request, res: Response) => {
+  const { projectId } = req.params as { projectId: string };
+  const userId = req.user.id;
   try {
-    const { projectId } = req.params as { projectId: string };
-    const userId = req.user.id;
     const project = await fetchProject(projectId, userId);
-    return res.status(200).json(project);
+    return sendSuccess(res, project, "Project retrieved successfully", 200);
   } catch (error: unknown) {
-    console.error(error);
-
-    return res.status(500).json({
-      error: "Failed to fetch project",
-    });
+    throw new ApiError("Failed to fetch project", 500);
   }
-};
+});
 
-export const deleteProject = async (req: Request, res: Response) => {
+export const deleteProject = asyncHandler(async (req: Request, res: Response) => {
+  const { projectId } = req.params as { projectId: string };
+  const userId = req.user.id;
   try {
-    const { projectId } = req.params as { projectId: string };
-    const userId = req.user.id;
     const project = await deletedProject({ projectId, userId });
-
-    return res.status(200).json({
-      message: "Project deleted successfully",
-      project,
-    });
+    return sendSuccess(res, project, "Project deleted successfully", 200);
   } catch (error: unknown) {
-    console.error(error);
-
     if (error instanceof Error) {
-      return res.status(404).json({ error: error.message });
+      throw new ApiError(error.message, 404);
     }
-
-    return res.status(500).json({
-      error: "Something went wrong",
-    });
+    throw error;
   }
-};
+});
 
-export const Target = async (req: Request, res: Response) => {
-  try {
-    const result = createTargetSchema.safeParse(req.body);
-    if (!result.success) {
-      return res.status(400).json({
-        error: result.error.message,
-      });
-    }
-    const { url, label } = result.data;
-    const { projectId } = req.params as { projectId: string };
-    const userId = req.user.id;
-
-    const project = await db.query.projects.findFirst({
-      where: and(
-        eq(projects.id, projectId),
-
-        eq(projects.userId, userId),
-      ),
-    });
-
-    if (!project) {
-      return res.status(403).json({
-        error: "Unauthorized access to project",
-      });
-    }
-    const target = await createTarget({ url, label, projectId });
-    return res.status(201).json(target);
-  } catch (error: unknown) {
-    return res.status(500).json({
-      error: "Internal Server Error",
-    });
+export const Target = asyncHandler(async (req: Request, res: Response) => {
+  const result = createTargetSchema.safeParse(req.body);
+  if (!result.success) {
+    throw new ApiError(result.error.message, 400);
   }
-};
+  const { url, label } = result.data;
+  const { projectId } = req.params as { projectId: string };
+  const userId = req.user.id;
+
+  const project = await db.query.projects.findFirst({
+    where: and(
+      eq(projects.id, projectId),
+      eq(projects.userId, userId),
+    ),
+  });
+
+  if (!project) {
+    throw new ApiError("Unauthorized access to project", 403);
+  }
+  const target = await createTarget({ url, label, projectId });
+  return sendSuccess(res, target, "Target created successfully", 201);
+});

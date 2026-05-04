@@ -5,71 +5,57 @@ import {
   createTriggerAudit,
   JobStatus,
 } from "../services/audit.service";
+import { asyncHandler } from "../utils/asyncHandler";
+import { sendSuccess, ApiError } from "../utils/response";
 
-export const triggerAudit = async (req: Request, res: Response) => {
+export const triggerAudit = asyncHandler(async (req: Request, res: Response) => {
+  const result = triggerAuditSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(result.error.message, 400);
+  }
+
+  const { targetId } = result.data;
+  const userId = req.user.id;
+
   try {
-    const result = triggerAuditSchema.safeParse(req.body);
-
-    if (!result.success) {
-      return res.status(400).json({
-        error: result.error.message,
-      });
-    }
-
-    const { targetId } = result.data;
-
-    const userId = req.user.id;
-
     const job = await createTriggerAudit({ targetId, userId });
-
-    return res.status(201).json(job);
+    return sendSuccess(res, job, "Audit triggered successfully", 201);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return res.status(400).json({
-        error: error.message,
-      });
+      throw new ApiError(error.message, 400);
     }
-
-    return res.status(500).json({
-      error: "Internal Server Error",
-    });
+    throw error;
   }
-};
+});
 
-export const getJobStatus = async (req: Request, res: Response) => {
+export const getJobStatus = asyncHandler(async (req: Request, res: Response) => {
   const { jobId } = req.params as { jobId: string };
   try {
     const job = await JobStatus({ jobId });
-    return res.status(200).json(job);
+    return sendSuccess(res, job, "Job status retrieved successfully", 200);
   } catch (err) {
     if (err instanceof Error && err.message === "Job_Not_Found") {
-      return res.status(404).json({
-        error: "Job not found",
-      });
+      throw new ApiError("Job not found", 404);
     }
-    console.error("Database Error:", err);
-    return res.status(500).json({
-      error: "Something went wrong",
-    });
+    throw err;
   }
-};
+});
 
-export const getAuditResult = async (req: Request, res: Response) => {
-  try {
-    const { targetId, limit = "10" } = req.query;
-    const userId = req.user.id;
+export const getAuditResult = asyncHandler(async (req: Request, res: Response) => {
+  const { targetId, limit = "10" } = req.query;
+  const userId = req.user.id;
 
-    if (!targetId || typeof targetId !== "string") {
-      return res.status(400).json({ error: "targetId required" });
-    }
-    const parsedLimit = Math.min(parseInt(limit as string, 10) || 10, 50);
-    const finalAudit = await AuditResult({
-      targetId,
-      limit: parsedLimit,
-      userId,
-    });
-    return res.json(finalAudit);
-  } catch (error) {
-    return res.status(500).json({ error: "Internal server error" });
+  if (!targetId || typeof targetId !== "string") {
+    throw new ApiError("targetId required", 400);
   }
-};
+  
+  const parsedLimit = Math.min(parseInt(limit as string, 10) || 10, 50);
+  const finalAudit = await AuditResult({
+    targetId,
+    limit: parsedLimit,
+    userId,
+  });
+  
+  return sendSuccess(res, finalAudit, "Audit results retrieved successfully", 200);
+});
