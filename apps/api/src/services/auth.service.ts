@@ -53,3 +53,15 @@ export const getUser = async ({ email, password }: signinInput) => {
     email: user.email,
   };
 };
+
+export const getUserById = async (userId: string) => {
+  const [user] = await db
+    .select({
+      id: userTable.id,
+      email: userTable.email,
+    })
+    .from(userTable)
+    .where(eq(userTable.id, userId))
+    .limit(1);
+  return user;
+};
