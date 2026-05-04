@@ -1,4 +1,4 @@
-import { auditJobs, auditResults, db } from "@repo/database/index";
+import { auditJobs, auditResults, db } from "@repo/database";
 import { Worker } from "bullmq";
 import { eq } from "drizzle-orm";
 import { runAudit } from "./runAudit";
