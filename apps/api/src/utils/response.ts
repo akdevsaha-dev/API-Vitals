@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ApiResponse } from "../types/api";
+import { ApiResponse } from "@repo/types";
 
 export class ApiError extends Error {
   public statusCode: number;
@@ -17,7 +17,7 @@ export const sendSuccess = <T>(
   res: Response,
   data: T,
   message?: string,
-  statusCode: number = 200
+  statusCode: number = 200,
 ) => {
   const response: ApiResponse<T> = {
     success: true,
@@ -35,10 +35,11 @@ export const sendError = (
   res: Response,
   message: string,
   statusCode: number = 500,
-  error?: any
+  error?: any,
 ) => {
-  const response: ApiResponse<null> = {
+  const response: ApiResponse<null> & { error?: any } = {
     success: false,
+    data: null,
     message,
   };
 

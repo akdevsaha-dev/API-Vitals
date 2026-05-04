@@ -76,7 +76,7 @@ const BurstProbe = () => {
   return (
     <div
       ref={containerRef}
-      className="w-full max-w-[500px] bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] rounded-sm border border-neutral-100 flex flex-col font-sans"
+      className="w-full max-w-125 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] rounded-sm border border-neutral-100 flex flex-col font-sans"
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100/60">
         <div className="flex items-center gap-4">
