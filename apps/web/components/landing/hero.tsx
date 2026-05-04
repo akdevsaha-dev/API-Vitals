@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Globe, Shield, Zap } from "lucide-react";
+import { ArrowRight, Globe, Zap } from "lucide-react";
 import { useState, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -26,8 +26,16 @@ const BurstProbe = () => {
   useGSAP(() => {
     if (status === "complete" && pathRef.current) {
       const length = pathRef.current.getTotalLength();
-      gsap.set(pathRef.current, { strokeDasharray: length, strokeDashoffset: length });
-      gsap.to(pathRef.current, { strokeDashoffset: 0, duration: 1.5, ease: "power2.out", delay: 0.2 });
+      gsap.set(pathRef.current, {
+        strokeDasharray: length,
+        strokeDashoffset: length,
+      });
+      gsap.to(pathRef.current, {
+        strokeDashoffset: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        delay: 0.2,
+      });
     }
   }, [status]);
 
@@ -112,16 +120,33 @@ const BurstProbe = () => {
             <button
               onClick={runBurst}
               disabled={status === "running"}
-              className={`flex items-center justify-center hover:cursor-pointer gap-2 px-6 h-full text-sm font-medium transition-all ${status === "running"
-                ? "bg-blue-500 text-white"
-                : "bg-black text-white hover:bg-neutral-800"
-                }`}
+              className={`flex items-center justify-center hover:cursor-pointer gap-2 px-6 h-full text-sm font-medium transition-all ${
+                status === "running"
+                  ? "bg-blue-500 text-white"
+                  : "bg-black text-white hover:bg-neutral-800"
+              }`}
             >
               {status === "running" ? (
                 <>
-                  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   Running
                 </>
@@ -147,19 +172,22 @@ const BurstProbe = () => {
             return (
               <div
                 key={m.id}
-                className={`flex flex-col p-3 transition-colors duration-300 ${isBlack ? 'bg-black text-white' : 'bg-white border border-neutral-200 text-black'}`}
+                className={`flex flex-col p-3 transition-colors duration-300 ${isBlack ? "bg-black text-white" : "bg-white border border-neutral-200 text-black"}`}
               >
-                <span className={`text-[8px] font-mono tracking-widest uppercase ${isBlack ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                <span
+                  className={`text-[8px] font-mono tracking-widest uppercase ${isBlack ? "text-neutral-400" : "text-neutral-500"}`}
+                >
                   {m.label}
                 </span>
-                <span className="text-sm font-bold mt-2 font-mono">{m.data}</span>
+                <span className="text-sm font-bold mt-2 font-mono">
+                  {m.data}
+                </span>
               </div>
             );
           })}
         </div>
 
-        <div className="h-[220px] flex flex-col justify-between border border-neutral-100 bg-white relative">
-
+        <div className="h-55 flex flex-col justify-between border border-neutral-100 bg-white relative">
           <div className="flex-1 w-full relative pt-4 overflow-hidden">
             {status === "running" ? (
               <div className="w-full h-full flex flex-col items-center justify-center pb-8">
@@ -180,16 +208,32 @@ const BurstProbe = () => {
                   ))}
                 </div>
                 <style jsx>{`
-                   @keyframes pulse {
-                     0% { transform: scaleY(0.5); }
-                     100% { transform: scaleY(1); }
-                   }
-                 `}</style>
+                  @keyframes pulse {
+                    0% {
+                      transform: scaleY(0.5);
+                    }
+                    100% {
+                      transform: scaleY(1);
+                    }
+                  }
+                `}</style>
               </div>
             ) : (
               <>
-                <svg viewBox="0 0 400 120" className="w-full h-full absolute inset-0 overflow-visible" preserveAspectRatio="none">
-                  <line x1="10" y1="60" x2="390" y2="60" stroke="#93c5fd" strokeWidth="1" strokeDasharray="3 3" />
+                <svg
+                  viewBox="0 0 400 120"
+                  className="w-full h-full absolute inset-0 overflow-visible"
+                  preserveAspectRatio="none"
+                >
+                  <line
+                    x1="10"
+                    y1="60"
+                    x2="390"
+                    y2="60"
+                    stroke="#93c5fd"
+                    strokeWidth="1"
+                    strokeDasharray="3 3"
+                  />
 
                   {status === "complete" && (
                     <path
@@ -207,20 +251,31 @@ const BurstProbe = () => {
 
           <div className="grid grid-cols-3 gap-0 border-t border-neutral-100 mx-4 mb-4">
             <div className="flex flex-col p-3 border border-neutral-100">
-              <span className="text-[8px] font-mono tracking-widest text-neutral-400 uppercase">P50</span>
-              <span className="text-sm font-bold mt-1 text-black font-sans">{pValues.p50}</span>
+              <span className="text-[8px] font-mono tracking-widest text-neutral-400 uppercase">
+                P50
+              </span>
+              <span className="text-sm font-bold mt-1 text-black font-sans">
+                {pValues.p50}
+              </span>
             </div>
             <div className="flex flex-col p-3 border border-blue-400 bg-blue-50/30 relative">
-              <span className="text-[8px] font-mono tracking-widest text-blue-500 uppercase">P95</span>
-              <span className="text-sm font-bold mt-1 text-black font-sans">{pValues.p95}</span>
+              <span className="text-[8px] font-mono tracking-widest text-blue-500 uppercase">
+                P95
+              </span>
+              <span className="text-sm font-bold mt-1 text-black font-sans">
+                {pValues.p95}
+              </span>
             </div>
             <div className="flex flex-col p-3 border border-neutral-100">
-              <span className="text-[8px] font-mono tracking-widest text-neutral-400 uppercase">P99</span>
-              <span className="text-sm font-bold mt-1 text-black font-sans">{pValues.p99}</span>
+              <span className="text-[8px] font-mono tracking-widest text-neutral-400 uppercase">
+                P99
+              </span>
+              <span className="text-sm font-bold mt-1 text-black font-sans">
+                {pValues.p99}
+              </span>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
@@ -229,35 +284,48 @@ const BurstProbe = () => {
 export const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.from("[data-hero-animate]", {
-        y: 30,
-        opacity: 0,
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.12,
-        delay: 0.2,
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from("[data-hero-animate]", {
+          y: 30,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.12,
+          delay: 0.2,
+        });
       });
-    });
-  }, { scope: sectionRef });
+    },
+    { scope: sectionRef },
+  );
 
   return (
-    <section ref={sectionRef} id="hero" className="relative min-h-screen w-full bg-[#ffffff] overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="relative min-h-screen w-full bg-[#ffffff] overflow-hidden"
+    >
       <div className="dots absolute inset-0 z-0"></div>
       <div className="grid-triangle absolute inset-0 z-0"></div>
 
       <div className="hero relative z-10 h-full pt-36 pb-20 lg:pt-30 lg:pb-0">
         <div>
-          <div data-hero-animate className="border border-neutral-300 w-full max-w-md flex font-mono h-8 rounded-full font-light items-center justify-center text-xs sm:text-sm gap-2 sm:gap-3">
+          <div
+            data-hero-animate
+            className="border border-neutral-300 w-full max-w-md flex font-mono h-8 rounded-full font-light items-center justify-center text-xs sm:text-sm gap-2 sm:gap-3"
+          >
             <div className="w-1.5 h-1.5 animate-pulse rounded-full bg-blue-600"></div>
             <div>lumen</div>
             <div className="w-0.5 h-0.5 bg-black rounded-full"></div>
             <div>100-request burst engine, now public</div>
           </div>
           <div>
-            <div data-hero-animate className="dialog mt-5 tracking-tighter text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold max-w-2xl leading-[1.1]">
+            <div
+              data-hero-animate
+              className="dialog mt-5 tracking-tighter text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold max-w-2xl leading-[1.1]"
+            >
               <div>
                 The{" "}
                 <span className="font-sans text-neutral-500 italic font-light">
@@ -271,7 +339,10 @@ export const Hero = () => {
                 </span>
               </div>
             </div>
-            <div data-hero-animate className="mt-10 max-w-xl text-base lg:text-lg text-neutral-600">
+            <div
+              data-hero-animate
+              className="mt-10 max-w-xl text-base lg:text-lg text-neutral-600"
+            >
               lumen fires{" "}
               <span className="font-semibold text-black">100 concurrent</span>{" "}
               probes at any HTTP target, then unpacks the timeline — DNS, TCP,
@@ -296,7 +367,8 @@ export const Hero = () => {
         <div className="hidden lg:flex flex-1 flex-col items-end gap-4">
           <BurstProbe />
           <div className="text-[9px] font-mono tracking-[0.2em] text-neutral-400 uppercase mr-2">
-            - SIMULATED LOCALLY FOR THE DEMO · REAL ENGINE EMITS THE SAME TELEMETRY
+            - SIMULATED LOCALLY FOR THE DEMO · REAL ENGINE EMITS THE SAME
+            TELEMETRY
           </div>
         </div>
       </div>

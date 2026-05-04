@@ -14,7 +14,7 @@ export default function DashboardPage() {
           <div className="font-display font-extrabold text-lg tracking-tight">
             Lumen
           </div>
-          <div className="h-4 w-[1px] bg-neutral-300 mx-2"></div>
+          <div className="h-4 w-px bg-neutral-300 mx-2"></div>
           <div className="text-xs font-mono tracking-widest text-neutral-500 uppercase">
             Dashboard
           </div>
