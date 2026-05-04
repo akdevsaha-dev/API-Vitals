@@ -1,4 +1,4 @@
-import { db, targets } from "@repo/database/index";
+import { db, targets } from "@repo/database";
 import { eq } from "drizzle-orm";
 
 export const DeletedTarget = async (targetId: string, userId: string) => {

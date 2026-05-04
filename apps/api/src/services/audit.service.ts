@@ -4,7 +4,7 @@ import {
   db,
   projects,
   targets,
-} from "@repo/database/index";
+} from "@repo/database";
 import { triggerInput } from "../validations/vals";
 import { and, desc, eq } from "drizzle-orm";
 import { randomUUID } from "crypto";

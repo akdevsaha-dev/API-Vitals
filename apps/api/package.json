@@ -11,10 +11,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/types": "workspace:*",
-    "@repo/lib": "workspace:*",
     "@repo/database": "workspace:*",
+    "@repo/lib": "workspace:*",
     "@repo/queue": "workspace:*",
+    "@repo/types": "workspace:*",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@repo/config": "workspace:*",
     "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.13.10",

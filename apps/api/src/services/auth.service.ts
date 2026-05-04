@@ -1,4 +1,4 @@
-import { db, userTable } from "@repo/database/index";
+import { db, userTable } from "@repo/database";
 import { signinInput, signupInput } from "../validations/vals";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";

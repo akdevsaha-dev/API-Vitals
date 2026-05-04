@@ -8,7 +8,7 @@ import {
   Project,
 } from "../services/project.service";
 import { and, eq } from "drizzle-orm";
-import { db, projects } from "@repo/database/index";
+import { db, projects } from "@repo/database";
 import { asyncHandler } from "../utils/asyncHandler";
 import { sendSuccess, ApiError } from "../utils/response";
 

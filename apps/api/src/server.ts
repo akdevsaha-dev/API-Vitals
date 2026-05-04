@@ -1,5 +1,6 @@
-import express from "express";
 import "dotenv/config";
+import express from "express";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import { config } from "./configs/config";
 import authRouter from "./routes/auth.route";
@@ -13,6 +14,12 @@ async function start() {
   try {
     await connectRedis();
     const app = express();
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      }),
+    );
     app.use(express.json());
     app.use(cookieParser());
     app.get("/health", (req, res) => {

@@ -1,4 +1,4 @@
-import { db, projects, targets } from "@repo/database/index";
+import { db, projects, targets } from "@repo/database";
 import { createProjectInput, createTargetInput } from "../validations/vals";
 import { and, eq } from "drizzle-orm";
 
