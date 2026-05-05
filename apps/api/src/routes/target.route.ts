@@ -4,5 +4,5 @@ import { deleteTarget } from "../handlers/target.handler";
 
 const router = Router();
 
-router.delete("/:targerId", authMiddleware, deleteTarget);
+router.delete("/:targetId", authMiddleware, deleteTarget);
 export default router;

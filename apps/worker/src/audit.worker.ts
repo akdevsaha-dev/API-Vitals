@@ -20,16 +20,16 @@ new Worker("audit", async (job) => {
     await db.insert(auditResults).values({
       jobId,
       targetId,
-      dnsTime: result.DNSTime,
-      tcpTime: result.TCPTime,
-      tlsTime: result.TLSTime,
-      ttfb: result.TTFB,
-      totalTime: result.TotalTime,
-      p50: result.P50,
-      p95: result.P95,
-      p99: result.P99,
-      stdDev: result.StdDev,
-      statusCode: result.StatusCode,
+      dnsTime: result.dns_time,
+      tcpTime: result.tcp_time,
+      tlsTime: result.tls_time,
+      ttfb: result.ttfb,
+      totalTime: result.total_time,
+      p50: result.p50,
+      p95: result.p95,
+      p99: result.p99,
+      stdDev: result.std_dev,
+      statusCode: Math.floor(result.status_code),
     });
     await db
       .update(auditJobs)
@@ -46,5 +46,10 @@ new Worker("audit", async (job) => {
         errorLog: String(err),
       })
       .where(eq(auditJobs.id, jobId));
+  }
+}, {
+  connection: {
+    host: "localhost",
+    port: 6379,
   }
 });

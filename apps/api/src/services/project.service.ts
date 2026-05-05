@@ -60,6 +60,9 @@ export const fetchProjects = async (userId: string) => {
   try {
     const userProjects = await db.query.projects.findMany({
       where: eq(projects.userId, userId),
+      with: {
+        targets: true,
+      },
     });
 
     return userProjects;
@@ -72,7 +75,14 @@ export const fetchProject = async (projectId: string, userId: string) => {
   const project = await db.query.projects.findFirst({
     where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
     with: {
-      targets: true,
+      targets: {
+        with: {
+          results: {
+            limit: 20,
+            orderBy: (auditResults, { desc }) => [desc(auditResults.createdAt)],
+          },
+        },
+      },
     },
   });
   return project;
