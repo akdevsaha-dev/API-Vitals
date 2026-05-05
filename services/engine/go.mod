@@ -1,3 +1,3 @@
-module github.com/akdevsaha-dev/api-vitals/services/engine
+module github.com/akdevsaha-dev/lumen/services/engine
 
 go 1.26.1

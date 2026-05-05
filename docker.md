@@ -1,6 +1,6 @@
 # 🐳 Docker Setup Guide
 
-API Vitals is fully containerized, providing a seamless local development experience and an easy path to production deployment. This guide walks you through setting up the infrastructure and services using Docker Compose.
+Lumen is fully containerized, providing a seamless local development experience and an easy path to production deployment. This guide walks you through setting up the infrastructure and services using Docker Compose.
 
 ## Architecture Overview
 
@@ -30,7 +30,7 @@ cp .env.example .env
 ```env
 DB_USER=postgres
 DB_PASSWORD=your_secure_password
-DB_NAME=api_vitals
+DB_NAME=lumen
 ```
 
 ### 2. Running the Stack
@@ -53,10 +53,10 @@ docker-compose ps
 ```
 
 You should see four running containers:
-- `api-vitals-db` (Port `5432`)
-- `api-vitals-redis` (Port `6379`)
-- `api-vitals-api` (Port `3000`)
-- `api-vitals-worker`
+- `lumen-db` (Port `5432`)
+- `lumen-redis` (Port `6379`)
+- `lumen-api` (Port `3000`)
+- `lumen-worker`
 
 To view the logs of a specific service (e.g., the worker):
 ```bash

@@ -1,4 +1,4 @@
-#  API Vitals
+#  Lumen
 
 ![License](https://img.shields.io/badge/License-ISC-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0.3-blue.svg)
@@ -9,7 +9,7 @@
 
 > A high-performance, polyglot network telemetry and API monitoring platform.
 
-API Vitals is an enterprise-grade API monitoring platform designed to perform deep, high-frequency telemetry audits. Built with a modern, polyglot monorepo architecture, it leverages **TypeScript/Node.js** for seamless orchestration and web delivery, paired with a specialized **Go** engine for bare-metal network performance probing.
+Lumen is an enterprise-grade API monitoring platform designed to perform deep, high-frequency telemetry audits. Built with a modern, polyglot monorepo architecture, it leverages **TypeScript/Node.js** for seamless orchestration and web delivery, paired with a specialized **Go** engine for bare-metal network performance probing.
 
 ## 🚀 Key Features
 
@@ -63,8 +63,8 @@ graph TD
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/api-vitals.git
-   cd api-vitals
+   git clone https://github.com/your-username/lumen.git
+   cd lumen
    ```
 
 2. **Install dependencies:**

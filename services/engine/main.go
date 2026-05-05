@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/akdevsaha-dev/api-vitals/services/engine/internal/prober"
+	"github.com/akdevsaha-dev/lumen/services/engine/internal/prober"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 ---
-description: API Vitals" — A high-performance, polyglot network telemetry and API monitoring platform.
+description: Lumen — A high-performance, polyglot network telemetry and API monitoring platform.
 ---
 
-Project Identity: "API Vitals" — A high-performance, polyglot network telemetry and API monitoring platform.
+Project Identity: "Lumen" — A high-performance, polyglot network telemetry and API monitoring platform.
 
 Core Architecture:
 
