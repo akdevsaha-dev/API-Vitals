@@ -43,6 +43,7 @@ export const createTriggerAudit = async ({
     await auditQueue.add("run_audit", {
       jobId,
       url: target[0].url,
+      targetId,
     });
     return { jobId };
   } catch (err) {
@@ -91,4 +92,67 @@ export const AuditResult = async ({
     .orderBy(desc(auditResults.createdAt))
     .limit(limit);
   return result;
+};
+
+export const AuditHistory = async ({
+  userId,
+  limit,
+  offset,
+  projectId,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+  projectId?: string;
+}) => {
+  const result = await db
+    .select({
+      job: auditJobs,
+      target: targets,
+      project: projects,
+      result: auditResults,
+    })
+    .from(auditJobs)
+    .innerJoin(targets, eq(auditJobs.targetId, targets.id))
+    .innerJoin(projects, eq(targets.projectId, projects.id))
+    .leftJoin(auditResults, eq(auditJobs.id, auditResults.jobId))
+    .where(
+      and(
+        eq(projects.userId, userId),
+        projectId ? eq(projects.id, projectId) : undefined
+      )
+    )
+    .orderBy(desc(auditJobs.createdAt))
+    .limit(limit)
+    .offset(offset);
+  
+  return result;
+};
+
+export const getAuditHistoryById = async ({
+  userId,
+  jobId,
+}: {
+  userId: string;
+  jobId: string;
+}) => {
+  const result = await db
+    .select({
+      job: auditJobs,
+      target: targets,
+      project: projects,
+      result: auditResults,
+    })
+    .from(auditJobs)
+    .innerJoin(targets, eq(auditJobs.targetId, targets.id))
+    .innerJoin(projects, eq(targets.projectId, projects.id))
+    .leftJoin(auditResults, eq(auditJobs.id, auditResults.jobId))
+    .where(and(eq(projects.userId, userId), eq(auditJobs.id, jobId)))
+    .limit(1);
+
+  if (result.length === 0) {
+    throw new Error("Job_Not_Found");
+  }
+
+  return result[0];
 };

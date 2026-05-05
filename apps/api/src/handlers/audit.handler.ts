@@ -4,6 +4,8 @@ import {
   AuditResult,
   createTriggerAudit,
   JobStatus,
+  AuditHistory,
+  getAuditHistoryById as getAuditHistoryByIdService,
 } from "../services/audit.service";
 import { asyncHandler } from "../utils/asyncHandler";
 import { sendSuccess, ApiError } from "../utils/response";
@@ -58,4 +60,43 @@ export const getAuditResult = asyncHandler(async (req: Request, res: Response) =
   });
   
   return sendSuccess(res, finalAudit, "Audit results retrieved successfully", 200);
+});
+
+export const getAuditHistory = asyncHandler(async (req: Request, res: Response) => {
+  const { limit = "50", offset = "0", projectId } = req.query;
+  const userId = req.user.id;
+
+  const parsedLimit = Math.min(parseInt(limit as string, 10) || 50, 100);
+  const parsedOffset = Math.max(parseInt(offset as string, 10) || 0, 0);
+
+  const history = await AuditHistory({
+    userId,
+    limit: parsedLimit,
+    offset: parsedOffset,
+    projectId: projectId as string,
+  });
+
+  return sendSuccess(res, history, "Audit history retrieved successfully", 200);
+});
+
+export const getAuditHistoryById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  if (!id) {
+    throw new ApiError("id is required", 400);
+  }
+
+  try {
+    const history = await getAuditHistoryByIdService({
+      userId,
+      jobId: id,
+    });
+    return sendSuccess(res, history, "Audit history retrieved successfully", 200);
+  } catch (err) {
+    if (err instanceof Error && err.message === "Job_Not_Found") {
+      throw new ApiError("Audit report not found", 404);
+    }
+    throw err;
+  }
 });
