@@ -132,10 +132,8 @@ export const Observability = () => {
         </div>
       </div>
 
-      {/* Right Side Graph Container */}
       <div data-obs-animate className="hidden lg:flex flex-1 justify-end">
         <div className="w-full max-w-[600px] border border-neutral-200 bg-white shadow-sm flex flex-col font-sans">
-          {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
             <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
@@ -148,13 +146,11 @@ export const Observability = () => {
             </div>
           </div>
 
-          {/* Metrics Row */}
           <div className="grid grid-cols-3 border-b border-neutral-100 relative bg-[#fafafa]/50">
             <div className="flex flex-col p-5 border-r border-neutral-100">
               <span className="text-[9px] font-mono tracking-widest text-neutral-400 uppercase mb-2">P50</span>
               <span className="text-2xl font-bold font-sans tracking-tight">98ms</span>
             </div>
-            {/* P95 with blue border overlay */}
             <div className="flex flex-col p-5 relative z-10 bg-blue-50/20">
               <div className="absolute inset-0 border border-blue-400 pointer-events-none"></div>
               <span className="text-[9px] font-mono tracking-widest text-neutral-400 uppercase mb-2">P95</span>
@@ -166,9 +162,7 @@ export const Observability = () => {
             </div>
           </div>
 
-          {/* Graph Area */}
           <div className="relative h-[240px] w-full p-5 flex flex-col">
-            {/* Y Axis */}
             <div className="absolute left-5 top-5 bottom-8 flex flex-col justify-between text-[8px] font-mono text-neutral-300">
               <span>160</span>
               <span>120</span>
@@ -177,14 +171,12 @@ export const Observability = () => {
               <span>0</span>
             </div>
 
-            {/* X Axis */}
             <div className="absolute left-10 right-5 bottom-3 flex justify-between text-[7px] font-mono text-neutral-300">
               {[...Array(30)].map((_, i) => (
                 <span key={i}>{i * 2}</span>
               ))}
             </div>
 
-            {/* Graph SVG */}
             <div className="absolute left-10 right-5 top-5 bottom-8 cursor-crosshair">
               <svg
                 className="w-full h-full overflow-visible"
@@ -193,17 +185,14 @@ export const Observability = () => {
                 onMouseMove={handleMouseMove}
                 onMouseLeave={() => setHoverPoint(null)}
               >
-                {/* P95 dashed line at value 146 -> 160 - 146 = 14 Y */}
                 <line x1="0" y1="14" x2="55" y2="14" stroke="#60a5fa" strokeWidth="0.5" strokeDasharray="1 1" />
                 <text x="56" y="15.5" fontSize="4" fill="#60a5fa" fontFamily="monospace">P9</text>
 
-                {/* Shaded Area underneath */}
                 <path
                   d={pathD + " L 60 160 L 0 160 Z"}
                   fill="rgba(0,0,0,0.02)"
                 />
 
-                {/* Main Line Graph Path */}
                 <path
                   d={pathD}
                   fill="none"
@@ -212,10 +201,8 @@ export const Observability = () => {
                   vectorEffect="non-scaling-stroke"
                 />
 
-                {/* Hover Effects */}
                 {hoverPoint && (
                   <g>
-                    {/* Vertical dashed line */}
                     <line
                       x1={hoverPoint.x}
                       y1={hoverPoint.y}
@@ -225,7 +212,6 @@ export const Observability = () => {
                       strokeWidth="0.2"
                       strokeDasharray="0.5 0.5"
                     />
-                    {/* Hover dot */}
                     <circle
                       cx={hoverPoint.x}
                       cy={hoverPoint.y}
@@ -240,7 +226,6 @@ export const Observability = () => {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between px-5 py-3 border-t border-neutral-100">
             <div className="text-[8px] font-mono tracking-[0.2em] text-neutral-400 uppercase">
               SPIKE AT PROBE 22 · TLS RENEGOTIATION, +68MS
