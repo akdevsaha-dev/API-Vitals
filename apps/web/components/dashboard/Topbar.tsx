@@ -2,7 +2,6 @@
 
 import { useAuthStore } from "@/store/authStore";
 import { LogOut, Search } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { useProjectStore } from "@/store/projectStore";
@@ -38,8 +37,12 @@ export function Topbar() {
             className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
           />
           <div className="flex items-center gap-1">
-            <kbd className="hidden rounded bg-neutral-100 px-1.5 py-0.5 text-[10px] font-medium text-neutral-500 sm:inline-block">⌘</kbd>
-            <kbd className="hidden rounded bg-neutral-100 px-1.5 py-0.5 text-[10px] font-medium text-neutral-500 sm:inline-block">K</kbd>
+            <kbd className="hidden rounded bg-neutral-100 px-1.5 py-0.5 text-[10px] font-medium text-neutral-500 sm:inline-block">
+              ⌘
+            </kbd>
+            <kbd className="hidden rounded bg-neutral-100 px-1.5 py-0.5 text-[10px] font-medium text-neutral-500 sm:inline-block">
+              K
+            </kbd>
           </div>
         </div>
       </div>
@@ -63,7 +66,10 @@ export function Topbar() {
           className="flex items-center gap-2 text-sm font-medium text-neutral-400 hover:text-black transition-colors group"
         >
           <span className="hidden sm:inline-block font-light">Sign Out</span>
-          <LogOut size={16} className="transition-transform group-hover:translate-x-0.5" />
+          <LogOut
+            size={16}
+            className="transition-transform group-hover:translate-x-0.5"
+          />
         </button>
       </div>
     </header>

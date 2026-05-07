@@ -1,4 +1,5 @@
 import { auditJobs, auditResults, db } from "@repo/database";
+import { redisConnection } from "@repo/queue";
 import { Worker } from "bullmq";
 import { eq } from "drizzle-orm";
 import { runAudit } from "./runAudit";
@@ -48,8 +49,5 @@ new Worker("audit", async (job) => {
       .where(eq(auditJobs.id, jobId));
   }
 }, {
-  connection: {
-    host: "localhost",
-    port: 6379,
-  }
+  connection: redisConnection as any,
 });

@@ -51,14 +51,14 @@ export const getAuditResult = asyncHandler(async (req: Request, res: Response) =
   if (!targetId || typeof targetId !== "string") {
     throw new ApiError("targetId required", 400);
   }
-  
+
   const parsedLimit = Math.min(parseInt(limit as string, 10) || 10, 50);
   const finalAudit = await AuditResult({
     targetId,
     limit: parsedLimit,
     userId,
   });
-  
+
   return sendSuccess(res, finalAudit, "Audit results retrieved successfully", 200);
 });
 
