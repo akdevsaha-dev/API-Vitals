@@ -10,6 +10,10 @@ import auditRouter from "./routes/audit.route";
 import { connectRedis } from "@repo/lib";
 import "./worker/audit.worker";
 
+console.log("=========================================");
+console.log("DEPLOYMENT VERSION: 1.0.1 (NUCLEAR FIX)");
+console.log("=========================================");
+
 const PORT = config.port;
 async function start() {
   try {
