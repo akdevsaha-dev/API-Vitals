@@ -2,14 +2,18 @@ import { createClient, type RedisClientType } from "redis";
 
 const getRedisUrl = () => {
   const url = process.env.REDIS_URL;
-  if (!url) {
-    if (process.env.RENDER || process.env.NODE_ENV === "production") {
-      console.warn("CRITICAL: REDIS_URL is missing in production environment!");
-      return "redis://REDIS_URL_MISSING:6379";
-    }
-    return "redis://localhost:6379";
+  if (url) {
+    console.log(`[Redis] Using REDIS_URL from environment: ${url.split('@')[1] || url}`);
+    return url;
   }
-  return url;
+  
+  if (process.env.RENDER || process.env.NODE_ENV === "production") {
+    console.error("!!! ERROR: REDIS_URL is NOT defined in production environment !!!");
+    return "redis://REDIS_URL_IS_MISSING_IN_ENV:6379";
+  }
+  
+  console.log("[Redis] No REDIS_URL found, falling back to localhost");
+  return "redis://localhost:6379";
 };
 
 export const redis: RedisClientType = createClient({
