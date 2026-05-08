@@ -19,8 +19,8 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 # Install dependencies
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-# Build the API (this now only runs tsup)
-RUN pnpm --filter api build
+# Build the API and all its internal workspace dependencies (@repo/*)
+RUN npx turbo run build --filter=api
 
 # Stage 4: Deploy (Prune)
 FROM base AS deploy
