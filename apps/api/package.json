@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src/server.ts --format esm --clean --out-dir dist && go build -o engine ../../services/engine/main.go",
+    "build": "tsup",
     "start": "node dist/server.js",
     "lint": "eslint .",
     "type-check": "tsc --noEmit"

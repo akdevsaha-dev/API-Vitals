@@ -143,9 +143,3 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 .turbo/
-
-# Docker
-Dockerfile
-**/Dockerfile
-docker-compose.yml
-.dockerignore
